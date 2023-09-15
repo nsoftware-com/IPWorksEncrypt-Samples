@@ -5,14 +5,14 @@ The provided sample projects offer a concise yet effective demonstration of the 
 IPWorks Encrypt 2022 libraries for the corresponding edition are required to run these samples.  Free download from: [https://www.nsoftware.com/ipworksencrypt](https://www.nsoftware.com/ipworksencrypt)
 
 ## Reference Documentation
-[Java](https://cdn.nsoftware.com/help/IEH/java/)
-[Javascript](https://cdn.nsoftware.com/help/IEH/js/)
-[.NET](https://cdn.nsoftware.com/help/IEH/cs/)
-[Python](https://cdn.nsoftware.com/help/IEH/py/)
-[PHP](https://cdn.nsoftware.com/help/IEH/php/)
-[C++](https://cdn.nsoftware.com/help/IEH/cpp/)
-[macOS](https://cdn.nsoftware.com/help/IEH/mac/)
-[iOS](https://cdn.nsoftware.com/help/IEH/mac/)
+* [Java Edition](https://cdn.nsoftware.com/help/IEH/java/)
+* [Javascript Edition](https://cdn.nsoftware.com/help/IEH/js/)
+* [.NET Edition](https://cdn.nsoftware.com/help/IEH/cs/)
+* [Python Edition](https://cdn.nsoftware.com/help/IEH/py/)
+* [PHP Edition](https://cdn.nsoftware.com/help/IEH/php/)
+* [C++ Edition](https://cdn.nsoftware.com/help/IEH/cpp/)
+* [macOS Edition](https://cdn.nsoftware.com/help/IEH/mac/)
+* [iOS Edition](https://cdn.nsoftware.com/help/IEH/mac/)
 
 ## Sample Projects
 | Sample Project | Description |
