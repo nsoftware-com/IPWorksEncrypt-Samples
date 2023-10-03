@@ -6,11 +6,12 @@ IPWorks Encrypt 2022 libraries for the corresponding edition are required to run
 
 ## Reference Documentation
 * [Java Edition](https://cdn.nsoftware.com/help/IEH/java/)
-* [Javascript Edition](https://cdn.nsoftware.com/help/IEH/js/)
 * [.NET Edition](https://cdn.nsoftware.com/help/IEH/cs/)
+* [JavaScript Edition](https://cdn.nsoftware.com/help/IEH/js/)
 * [Python Edition](https://cdn.nsoftware.com/help/IEH/py/)
 * [PHP Edition](https://cdn.nsoftware.com/help/IEH/php/)
 * [C++ Edition](https://cdn.nsoftware.com/help/IEH/cpp/)
+* [Delphi Edition](https://cdn.nsoftware.com/help/IEH/dlp/)
 * [macOS Edition](https://cdn.nsoftware.com/help/IEH/mac/)
 * [iOS Edition](https://cdn.nsoftware.com/help/IEH/mac/)
 

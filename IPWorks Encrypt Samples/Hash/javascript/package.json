@@ -8,7 +8,7 @@
   "main": "hash.js",
   "dependencies": {
     "full-icu": "*",
-    "ipworksencrypt": "^22.0.8658"
+    "ipworksencrypt": "^22.0.8676"
   },
   "scripts": {
     "hash": "node hash.js"
