@@ -1,5 +1,5 @@
 /*
- * IPWorks Encrypt 2022 Java Edition - Sample Project
+ * IPWorks Encrypt 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks Encrypt in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -23,7 +23,7 @@ public class ezrand extends ConsoleDemo {
     try {
       int algorithm = 1;
       String seed = "";
-      Ezrand ezrand1 = new Ezrand();
+      EzRand ezrand1 = new EzRand();
 
       String newline = System.getProperty("line.separator");
 
@@ -41,13 +41,13 @@ public class ezrand extends ConsoleDemo {
         algorithm = Integer.parseInt(prompt(newline + "Algorithm",":","" + algorithm));
         switch (algorithm) {
         case 1:
-          ezrand1.setAlgorithm(Ezrand.raISAAC);
+          ezrand1.setAlgorithm(EzRand.raISAAC);
           break;
         case 2:
-          ezrand1.setAlgorithm(Ezrand.raPlatform);
+          ezrand1.setAlgorithm(EzRand.raPlatform);
           break;
         case 3:
-          ezrand1.setAlgorithm(Ezrand.raSecurePlatform);
+          ezrand1.setAlgorithm(EzRand.raSecurePlatform);
           break;
         default:
           System.out.println("Invalid algorithm.");
@@ -124,15 +124,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

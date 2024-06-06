@@ -1,5 +1,5 @@
 /*
- * IPWorks Encrypt 2022 Java Edition - Sample Project
+ * IPWorks Encrypt 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks Encrypt in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -26,7 +26,7 @@ public class encrypt extends ConsoleDemo {
       String outputFile = "";
       String operation = "";
       String password = "";
-      Ezcrypt ezcrypt;
+      EzCrypt ezcrypt;
       
       System.out.println("******************************************************************************");
       System.out.println("* This demo show how to encrypt and decrypt files using symmetric algorithms *");
@@ -64,35 +64,35 @@ public class encrypt extends ConsoleDemo {
       
       prompt("\nPress enter to begin the operation.\n","");
       
-	  ezcrypt = new Ezcrypt();
+	  ezcrypt = new EzCrypt();
       switch(Integer.parseInt(algorithm))
       {
     	case 1:
-    	  ezcrypt.setAlgorithm(Ezcrypt.ezAES);
+    	  ezcrypt.setAlgorithm(EzCrypt.ezAES);
     	  break;
         case 2:
-    	  ezcrypt.setAlgorithm(Ezcrypt.ezCAST);
+    	  ezcrypt.setAlgorithm(EzCrypt.ezCAST);
     	  break;
     	case 3: 
-    	  ezcrypt.setAlgorithm(Ezcrypt.ezDES);
+    	  ezcrypt.setAlgorithm(EzCrypt.ezDES);
     	  break;
     	case 4:
-    	  ezcrypt.setAlgorithm(Ezcrypt.ezIDEA);
+    	  ezcrypt.setAlgorithm(EzCrypt.ezIDEA);
     	  break;
     	case 5:
-    	  ezcrypt.setAlgorithm(Ezcrypt.ezRC2);
+    	  ezcrypt.setAlgorithm(EzCrypt.ezRC2);
     	  break;
     	case 6:
-    	  ezcrypt.setAlgorithm(Ezcrypt.ezRC4);
+    	  ezcrypt.setAlgorithm(EzCrypt.ezRC4);
     	  break;
     	case 7:
-    	  ezcrypt.setAlgorithm(Ezcrypt.ezTripleDES);
+    	  ezcrypt.setAlgorithm(EzCrypt.ezTripleDES);
     	  break;
     	case 8:
-    	  ezcrypt.setAlgorithm(Ezcrypt.ezBlowfish);
+    	  ezcrypt.setAlgorithm(EzCrypt.ezBlowfish);
     	  break;
     	case 9:
-    	  ezcrypt.setAlgorithm(Ezcrypt.ezTwofish);
+    	  ezcrypt.setAlgorithm(EzCrypt.ezTwofish);
     	  break;
     	default:
     	  System.out.println("Invalid algorithm.");
@@ -152,15 +152,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

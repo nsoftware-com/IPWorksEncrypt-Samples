@@ -1,5 +1,5 @@
 (*
- * IPWorks Encrypt 2022 Delphi Edition - Sample Project
+ * IPWorks Encrypt 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks Encrypt in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -17,8 +17,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ComCtrls, StdCtrls, FileCtrl, ipccore, ipctypes, ipctwofish, ipctripledes,
-  ipcrc4, ipcrc2, ipcidea, ipcdes, ipccast, ipcblowfish, ipcaes, ipcezcrypt;
+  Dialogs, ComCtrls, StdCtrls, FileCtrl, ipccore, ipctypes, ipcezcrypt;
 
 type
   TFormEncrypt = class(TForm)

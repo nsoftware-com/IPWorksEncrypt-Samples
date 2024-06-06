@@ -1,5 +1,5 @@
 /*
- * IPWorks Encrypt 2022 Java Edition - Sample Project
+ * IPWorks Encrypt 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks Encrypt in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -20,9 +20,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
 import ipworksencrypt.Certificate;
-import ipworksencrypt.Ezrand;
+import ipworksencrypt.EzRand;
 import ipworksencrypt.IPWorksEncryptException;
-import ipworksencrypt.Jws;
+import ipworksencrypt.JWS;
 
 public class jws extends ConsoleDemo {
 
@@ -50,13 +50,13 @@ public class jws extends ConsoleDemo {
 	
 	private static void sign(String alg, String key, String message, String password) {
 		try {
-			Jws jws = new Jws();
+			JWS jws = new JWS();
 
 			// Set proper algorithm and key (using key from args[2] which must
 			// be Base64 key for HMAC, or name of key file for RSA/ECDSA)
 			switch (alg) {
 			case "HS256":
-				jws.setAlgorithm(Jws.jwsHS256);
+				jws.setAlgorithm(JWS.jwsHS256);
 				if(key.equals("0")) {
 					key = generateBase64Key(alg);
 				}
@@ -64,7 +64,7 @@ public class jws extends ConsoleDemo {
 				jws.setKey(key);
 				break;
 			case "HS384":
-				jws.setAlgorithm(Jws.jwsHS384);
+				jws.setAlgorithm(JWS.jwsHS384);
 				if(key.equals("0")) {
 					key = generateBase64Key(alg);
 				}
@@ -72,7 +72,7 @@ public class jws extends ConsoleDemo {
 				jws.setKey(key);
 				break;
 			case "HS512":
-				jws.setAlgorithm(Jws.jwsHS512);
+				jws.setAlgorithm(JWS.jwsHS512);
 				if(key.equals("0")) {
 					key = generateBase64Key(alg);
 				}
@@ -80,27 +80,27 @@ public class jws extends ConsoleDemo {
 				jws.setKey(key);
 				break;
 			case "RS256":
-				jws.setAlgorithm(Jws.jwsRS256);
+				jws.setAlgorithm(JWS.jwsRS256);
 				jws.setCertificate(new Certificate(Certificate.cstPFXFile, key, password, "*"));
 				break;
 			case "RS384":
-				jws.setAlgorithm(Jws.jwsRS384);
+				jws.setAlgorithm(JWS.jwsRS384);
 				jws.setCertificate(new Certificate(Certificate.cstPFXFile, key, password, "*"));
 				break;
 			case "RS512":
-				jws.setAlgorithm(Jws.jwsRS512);
+				jws.setAlgorithm(JWS.jwsRS512);
 				jws.setCertificate(new Certificate(Certificate.cstPFXFile, key, password, "*"));
 				break;
 			case "PS256":
-				jws.setAlgorithm(Jws.jwsPS256);
+				jws.setAlgorithm(JWS.jwsPS256);
 				jws.setCertificate(new Certificate(Certificate.cstPFXFile, key, password, "*"));
 				break;
 			case "PS384":
-				jws.setAlgorithm(Jws.jwsPS384);
+				jws.setAlgorithm(JWS.jwsPS384);
 				jws.setCertificate(new Certificate(Certificate.cstPFXFile, key, password, "*"));
 				break;
 			case "PS512":
-				jws.setAlgorithm(Jws.jwsPS512);
+				jws.setAlgorithm(JWS.jwsPS512);
 				jws.setCertificate(new Certificate(Certificate.cstPFXFile, key, password, "*"));
 				break;
 			default:
@@ -129,7 +129,7 @@ public class jws extends ConsoleDemo {
 		String base64Key = "";
 		try {
 			// Generate key
-			Ezrand ezrand = new Ezrand();
+			EzRand ezrand = new EzRand();
 			switch (alg) {
 			case "HS256":
 				ezrand.setRandBytesLength(32);
@@ -162,7 +162,7 @@ public class jws extends ConsoleDemo {
 
 
 	private static void verify(String alg, String key, String signed) {
-		Jws jws = new Jws();
+		JWS jws = new JWS();
 		try {
 			switch (alg) {
 			case "HS256":
@@ -241,15 +241,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

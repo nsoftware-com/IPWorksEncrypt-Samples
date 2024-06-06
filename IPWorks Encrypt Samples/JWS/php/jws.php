@@ -1,191 +1,198 @@
-<?php $sendBuffer = TRUE; ob_start(); ?>
-<html>
-<head>
-<title>IPWorks Encrypt 2022 Demos - JWS</title>
-<link rel="stylesheet" type="text/css" href="stylesheet.css">
-<meta name="description" content="IPWorks Encrypt 2022 Demos - JWS">
-</head>
-
-<body>
-
-<div id="content">
-<h1>IPWorks Encrypt - Demo Pages</h1>
-<h2>JWS</h2>
-<p>Shows how to sign and verify JSON Web Signatures using various algorithms.</p>
-<a href="default.php">[Other Demos]</a>
-<hr/>
-
 <?php
+/*
+ * IPWorks Encrypt 2024 PHP Edition - Sample Project
+ *
+ * This sample project demonstrates the usage of IPWorks Encrypt in a 
+ * simple, straightforward way. It is not intended to be a complete 
+ * application. Error handling and other checks are simplified for clarity.
+ *
+ * www.nsoftware.com/ipworksencrypt
+ *
+ * This code is subject to the terms and conditions specified in the 
+ * corresponding product license agreement which outlines the authorized 
+ * usage and restrictions.
+ */
 require_once('../include/ipworksencrypt_jws.php');
 require_once('../include/ipworksencrypt_certmgr.php');
+require_once('../include/ipworksencrypt_ezrand.php');
 require_once('../include/ipworksencrypt_const.php');
-
 ?>
-
 <?php
-try{
-$messageText = "";
-$signedText = "";
-$algorithm = "HS256";
-$keyText = "txAVam2uGT20a+ZJC1VWVGCM8tFYSKyJlw+2fgS/BdA=";
 
-if($_SERVER['REQUEST_METHOD'] == "POST") {
-  $algorithm = $_POST["algorithm"];
-  $signedText = $_POST["signed"];
-  $messageText = $_POST["message"];
-  $jws = new IPWorksEncrypt_Jws();
-	if ($algorithm == "HS256") {
-		$keyText = "txAVam2uGT20a+ZJC1VWVGCM8tFYSKyJlw+2fgS/BdA=";
-	} else if ($algorithm == "HS384") {
-		$keyText = "5C/iq/SVHc1i++8elF0u3Cg8w1D1Nj8Idrsw2zzIQeLrolmPk5d26f6MxTE3Npy2";
-	} else if ($algorithm == "HS512") {
-		$keyText = "AGVJSwvgVMU0cspZ7ChlxURcgCcdj7QV6nm0fr0C/rNtuh8F5uA7nCs4efKuWUDBw7/s9ikfTm0Kx4uZ3SYXcA==";
-	} 
-  if (isset($_POST["sign"])) {
-	  if ($algorithm == "HS256") {
-		$jws->setAlgorithm(0);
-	} else if ($algorithm == "HS384") {
-		$jws->setAlgorithm(1);		
-	} else if ($algorithm == "HS512") {
-		$jws->setAlgorithm(2);
-	} 
-	$jws->doConfig("KeyEncoding=1"); //Base64 input
-	$jws->setKey($keyText);
-	$jws->setInputMessage($messageText);
-	$jws->doSign();
-	$signedText = $jws->getOutputMessage();
-	$messageText = "";
-  } else if (isset($_POST["verify"])) {
-	if ($algorithm == "HS256") {
-		$jws->setAlgorithm(0);
-	} else if ($algorithm == "HS384") {
-		$jws->setAlgorithm(1);		
-	} else if ($algorithm == "HS512") {
-		$jws->setAlgorithm(2);
-	} 
-	$jws->doConfig("KeyEncoding=1"); //Base64 input
-	$jws->setKey($keyText);
-	$jws->setInputMessage($signedText);
-	$jws->doVerify();
-	$messageText = $jws->getOutputMessage();
-	$signedText = "";
-  }
-  
-	/*
-	* The JWS component can also sign payloads using RSA algorithms
-	* This example code demonstrates how RSA would be used
-	$jws->setAlgorithm(3); //jwsRS256
-	$jws->setCertStoreType(2); //cstPFX
-	$jws->setCertStore("..\\testrsapriv.pfx");
-	$jws->setCertStorePassword("test");
-	$jws->setCertSubject("*");
-	$jws->setInputMessage = "test";
-	$jws->doSign();
-	*/
-
-	/*
-	* The JWS component can also sign payloads using ECDSA algorithms
-	* This example code demonstrates how ECDSA would be used
-	$jws->setAlgorithm(9); //jwsES256
-	$jws->setCertStoreType(6); //cstPEMKeyFile
-	$jws->setCertStore("..\\testeccpriv.txt");
-	$jws->setCertSubject("*");
-	$jws->setInputMessage = "test";
-	$jws->doSign();
-	*/	
-	
-	
-	
-	/*
-	* The JWS component can also verify JWS strings using RSA algorithms
-	* This example code demonstrates how RSA would be used
-	$jws->setAlgorithm(3); //jwsRS256
-	$jws->setCertStoreType(6); //cstPEMKeyFile
-	$jws->setCertStore("..\\testrsapub.cer");
-	$jws->setCertSubject("*");
-	$jws->setInputMessage = "test";
-	$jws->doVerify();
-	*/
-
-	/*
-	* The JWS component can also verify JWS strings using ECDSA algorithms
-	* This example code demonstrates how ECDSA would be used
-	$jws->setAlgorithm(9); //jwsES256
-	$jws->setCertStoreType(8); //cstPublicKeyFile
-	$jws->setCertStore("..\\testeccpub.txt");
-	$jws->setCertSubject("*");
-	$jws->setInputMessage = "test";
-	$jws->doVerify();
-	*/
-}
+function GenerateBase64Key($algorithm) {
+  $base64key = "";
+  try
+  {
+    // Generate key.
+    $ezrand = new IPWorksEncrypt_Ezrand();
+    switch ($algorithm)
+    {
+      case "hs256":
+        $ezrand->setRandBytesLength(32);
+        break;
+      case "hs384":
+        $ezrand->setRandBytesLength(48);
+        break;
+      case "hs512":
+        $ezrand->setRandBytesLength(64);
+        break;
+      default:
+        echo "Invalid algorithm selection.\n";
+        return;
+    }
+    $ezrand->doConfig("OutputEncoding=1"); // base64
+    $ezrand->doGetNextBytes();
+    $base64key = str_replace("\r\n", "", $ezrand->getRandBytes());
+    echo "Key generated for signing: " . $base64key . "\n";
   } catch (Exception $e) {
-    echo '<font color="red">Error: ',  $e->getMessage(), "</font><br/>";
+    echo "Error: " . $e->getMessage() . "\n";
   }
+  return $base64key;
+}
+
+if ($argc < 9) {
+  echo "usage: php jws.php -a action -alg algorithm -k key -i input [-p keypassword]\n\n";
+  echo "  action       chosen from {sign, verify}\n";
+  echo "  algorithm    the HMAC or RSA algorithm to use, chosen from {HS256, HS384, HS512, RS256, RS384, RS512, PS256, PS384, PS512}\n";
+  echo "  key          for HMAC, the base64 key or '0' to generate a key\n";
+  echo "               for RSA, the path to the key certificate (private for signing, public for verifying)\n";
+  echo "  input        the payload string to sign or JWS string to verify\n";
+  echo "  keypassword  the key certificate password (required only for private certificates with passwords)\n\n";
+  echo "Examples: php jws.php -a sign -alg HS256 -k txAVam2uGT20a+ZJC1VWVGCM8tFYSKyJlw+2fgS/BdA= -i \"Test message\"\n";
+  echo "          php jws.php -a sign -alg HS512 -k 0 -i \"Test message\"\n";
+  echo "          php jws.php -a sign -alg RS384 -k .\\testrsapriv.pfx -i \"Test message\" -p test\n";
+  echo "          php jws.php -a verify -alg HS256 -k ygIg4/Ut0KwUK2nS6fnflj1C5pAhgiXmVzqRqR2WTyU= -i eyJhbGciOiJIUzI1NiJ9.SGVsbG8.Deg4sWY8OL1pbXh6zVy7Wkr2brjVUrMBrIzeY5WlxM4\n";
+  echo "          php jws.php -a verify -alg PS256 -k .\\testrsapub.cer -i eyJhbGciOiJQUzI1NiJ9.SGVsbG8.AqVXRmp7nmy74WQSoFrpY-Y4flb60n2e_XTjl51t0P1l-BqSCFj79wfaNf9-MJxCYbHkuFPjwkBq9-vvzxse0V-Bd0cjlXA9RY-LRn_wRHXRZUqParsZhsvWSqHY8MC4xAkXWCJuiDPWIuvDnd8mJDr_7vVbjIRipfifPkMMn3ePSvRSXWSBobalZxM320sYhReDgCZi5Mjb21cMSdowWj048AXFM86yL50UTh5rl2op3dG5JB9JbqBwVPDybdG7TK9r_84LYAajbTF7MepyMGWMAP7oSV1G-zBnBqpUC-HpTMRC-9xt9G3H0t1lUPePOBwB5ZdMeABrkFOSTwcIbQ\n\n";
+  return;
+}
+
+try {
+  $jws = new IPWorksEncrypt_JWS();
+  $action = $algorithm = $key = $keyPassword = $input = "";
+
+  for ($i = 1; $i < $argc; $i++) {
+    if (str_starts_with($argv[$i],"-")) {
+      if ($argv[$i] == "-alg") {
+        $algorithm = strtolower($argv[$i + 1]);
+      }
+      if ($argv[$i] == "-a") {
+        $action = $argv[$i + 1];
+      }
+      if ($argv[$i] == "-k") {
+        $key = $argv[$i + 1];
+      }
+      if ($argv[$i] == "-i") {
+        $input = $argv[$i + 1];
+      }
+      if ($argv[$i] == "-p") {
+        $keyPassword = $argv[$i + 1];
+      }
+    }
+  }
+
+  if ($action == "sign") {
+    // sign
+    switch ($algorithm) {
+      case "hs256":
+        $jws->setAlgorithm(0);
+        // todo
+        if ($key == "0") { $key = GenerateBase64Key($algorithm); }
+        $jws->doConfig("KeyEncoding=1"); // base64
+        $jws->setKey($key);
+        break;
+      case "hs384":
+        $jws->setAlgorithm(1);
+        // todo
+        if ($key == "0") { $key = GenerateBase64Key($algorithm); }
+        $jws->doConfig("KeyEncoding=1"); // base64
+        $jws->setKey($key);
+        break;
+      case "hs512":
+        $jws->setAlgorithm(2);
+        // todo
+        if ($key == "0") { $key = GenerateBase64Key($algorithm); }
+        $jws->doConfig("KeyEncoding=1"); // base64
+        $jws->setKey($key);
+        break;
+      case "rs256":
+        $jws->setAlgorithm(3);
+        $jws->setCertStoreType(2); //PFX File
+        $jws->setCertStore($key);
+        $jws->setCertStorePassword($keyPassword);
+        $jws->setCertSubject("*");
+        break;
+      case "rs384":
+        $jws->setAlgorithm(4);
+        $jws->setCertStoreType(2); //PFX File
+        $jws->setCertStore($key);
+        $jws->setCertStorePassword($keyPassword);
+        $jws->setCertSubject("*");
+        break;
+      case "rs512":
+        $jws->setAlgorithm(5);
+        $jws->setCertStoreType(2); //PFX File
+        $jws->setCertStore($key);
+        $jws->setCertStorePassword($keyPassword);
+        $jws->setCertSubject("*");
+        break;
+      case "ps256":
+        $jws->setAlgorithm(6);
+        $jws->setCertStoreType(2); //PFX File
+        $jws->setCertStore($key);
+        $jws->setCertStorePassword($keyPassword);
+        $jws->setCertSubject("*");
+        break;
+      case "ps384":
+        $jws->setAlgorithm(7);
+        $jws->setCertStoreType(2); //PFX File
+        $jws->setCertStore($key);
+        $jws->setCertStorePassword($keyPassword);
+        $jws->setCertSubject("*");
+        break;
+      case "ps512":
+        $jws->setAlgorithm(8);
+        $jws->setCertStoreType(2); //PFX File
+        $jws->setCertStore($key);
+        $jws->setCertStorePassword($keyPassword);
+        $jws->setCertSubject("*");
+        break;
+      default:
+        echo "Invalid algorithm selection.\n";
+        return;
+    }
+    $jws->setInputMessage($input);
+    $jws->doSign();
+    echo "Payload signed:\n" . $jws->getOutputMessage() . "\n";
+  } elseif ($action == "verify") {
+    // verify
+    switch ($algorithm) {
+      case "hs256":
+      case "hs384":
+      case "hs512":
+        $jws->doConfig("KeyEncoding=1");
+        $jws->setKey($key);
+        break;
+      case "rs256":
+      case "rs384":
+      case "rs512":
+      case "ps256":
+      case "ps384":
+      case "ps512":
+        $jws->setCertStoreType(99);
+        $jws->setCertStore($key);
+        $jws->setCertSubject("*");
+        break;
+      default:
+        throw new Exception("Invalid algorithm selection.\n");
+    }
+    // Verify JWS string and display output.
+    $jws->setInputMessage($input);
+    $jws->doVerify();
+    echo "JWS string verified:\n" . $jws->getOutputMessage() . "\n";
+  } else {
+    echo "Invalid action.\n";
+  }
+}  catch (Exception $e) {
+  echo "Error: " . $e->getMessage() . "\n";
+}
 ?>
-
-<form method=POST name=formJws>
-<center>
-<table width="90%">
-  <tr>
-    <td>
-	  Algorithm: 
-	  <select name="algorithm" onChange="formJws.submit();">
-        <option value="HS256" <?php echo ($algorithm=="HS256")?"selected":""?>>HS256</option>
-        <option value="HS384" <?php echo ($algorithm=="HS384")?"selected":""?>>HS384</option>
-	    <option value="HS512" <?php echo ($algorithm=="HS512")?"selected":""?>>HS512</option>
-      </select>
-    </td>
-	<td>
-	  Key: <input type="text" name="key" size="50" value="<?php echo $keyText; ?>">
-	</td>
-  </tr>
-  <tr>
-    <td>Payload:</td>
-	<td>JWS String:</td>
-  </tr>
-  <tr>
-    <td>
-	  <textarea name="message" cols="55" rows="15"><?php echo $messageText; ?></textarea>
-	</td>
-    <td>
-	  <textarea name="signed" cols="55" rows="15"><?php echo $signedText; ?></textarea>
-	</td>
-  </tr>
-  <tr>
-    <td>
-	<input type="submit" name="sign" value="Sign >>>">
-    </td>
-	<td>
-	<input type="submit" name="verify" value="<<< Verify">
-	</td>
-  </tr>
-</table>
-</center>
-</form>
-<br/>
-<br/>
-<br/>
-<hr/>
-NOTE: These pages are simple demos, and by no means complete applications.  They
-are intended to illustrate the usage of the IPWorks Encrypt objects in a simple,
-straightforward way.  What we are hoping to demonstrate is how simple it is to
-program with our components.  If you want to know more about them, or if you have
-questions, please visit <a href="http://www.nsoftware.com/?demopg-IEPHA" target="_blank">www.nsoftware.com</a> or
-contact our technical <a href="http://www.nsoftware.com/support/">support</a>.
-<br/>
-<br/>
-Copyright (c) 2023 /n software inc.
-<br/>
-<br/>
-</div>
-
-<div id="footer">
-<center>
-IPWorks Encrypt 2022 - Copyright (c) 2023 /n software inc. - For more information, please visit our website at <a href="http://www.nsoftware.com/?demopg-IEPHA" target="_blank">www.nsoftware.com</a>.
-</center>
-</div>
-
-</body>
-</html>
-
-<?php if ($sendBuffer) ob_end_flush(); else ob_end_clean(); ?>
