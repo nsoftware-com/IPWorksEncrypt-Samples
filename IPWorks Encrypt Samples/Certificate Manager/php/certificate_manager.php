@@ -16,93 +16,32 @@ require_once('../include/ipworksencrypt_certmgr.php');
 require_once('../include/ipworksencrypt_const.php');
 ?>
 <?php
-  $certstore = array_key_exists("certstore", $_GET) ? $_GET["certstore"] : "";
-  $certsubject = array_key_exists("certsubject", $_GET) ? $_GET["certsubject"] : "";
-  $machine = array_key_exists("machine", $_GET) ? $_GET["machine"] : "";
-  $thispage = $_SERVER["PHP_SELF"];
-  $certmgr = new IPWorksEncrypt_CertMgr();
-?>
-
-<ul>
-<li><b><a href="<?php echo $thispage; ?>?machine=yes">[List Machine Stores]</a>
-<li><b><a href="<?php echo $thispage; ?>">[List User Stores]</a>
-
-<p>
-<dl>
-<?php
-  if ($machine == "yes") {
-  	$stores = $certmgr->doListMachineStores();
-  	$storeparam = "&machine=yes";
-  } else {
-  	$stores = $certmgr->doListCertificateStores();
-  	$storeparam = "";
+class MyCertMgr extends IPWorksEncrypt_CertMgr
+{
+  function fireCertList($param) {
+    echo $param['certsubject'] . "\n";
   }
+  function fireError($param) {
+    echo "Error: " . $param['description'] . "\n";
+  }
+}
 
-  $mystores =  explode("\r\n",$stores);
-  for($i = 0; $i < count($mystores) -1; $i++){
-
-    $store = $mystores[$i];
-
-    if (strtoupper($certstore) == strtoupper($store)) {
-
-      //if store is selected then expand it
-      echo "<dt><b>[ &nbsp; ] <u>" . $store . "</u></b>";
-
-      echo "<dd><ul>";
-
-      $certmgr->setCertStore($store);
-      $certs = $certmgr->doListStoreCertificates();
-      $mycerts = explode("\r\n",$certs);
-
-      for($j=0;$j<count($mycerts) -1;$j++){
-        $subjectList = explode("\t",$mycerts[$j]);
-        $subject = $subjectList[0];
-
-      	if (strtoupper($certsubject) == strtoupper($subject)) {
-      	//if certificate is selected then show it
-          echo "<li><b><u><a name=selectedCert>" . $subject . "</u></b>";
-
-          $certmgr->setCertSubject($subject);
-
-          echo "<table bgcolor=whitesmoke>";
-
-          echo "<tr><td><i>Issuer:              <td>" . $certmgr->getCertIssuer();
-          echo "<tr><td><i>Subject:             <td>" . $certmgr->getCertSubject();
-          echo "<tr><td><i>Version:             <td>" . $certmgr->getCertVersion();
-          echo "<tr><td><i>SerialNumber:        <td>" . $certmgr->getCertSerialNumber();
-          echo "<tr><td><i>SignatureAlgorithm:  <td>" . $certmgr->getCertSignatureAlgorithm();
-          echo "<tr><td><i>EffectiveDate:       <td>" . $certmgr->getCertEffectiveDate();
-          echo "<tr><td><i>ExpirationDate:      <td>" . $certmgr->getCertExpirationDate();
-          echo "<tr><td><i>PublicKeyAlgorithm:  <td>" . $certmgr->getCertPublicKeyAlgorithm();
-          echo "<tr><td><i>PublicKeyLength:     <td>" . $certmgr->getCertPublicKeyLength();
-
-          echo "</table>";
-        } else {
-          echo "<li><a href=" . $thispage . "?";
-          echo "certstore=" . urlencode($store);
-          echo "&certsubject=" . urlencode($subject) . $storeparam;
-          echo "#selectedCert>" . $subject . "</a>";
-      	}
-      } //for loop
-
-
-      echo "</ul>";
-
-    } else {
-
-      //if store not selected, just list it
-      echo "<dt><b>";
-      echo "<a href=" . $thispage . "?certstore=" . urlencode($store) . $storeparam . ">";
-      echo "[+]</a> ";
-      echo "<a href=" . $thispage . "?certstore=" . urlencode($store) . $storeparam . ">";
-      echo $store;
-      echo "</a></b>";
-
-    }
-  } //for loop
+if ($argc < 2) {
+  echo "Usage: php certificate_manager.php filename [password]\n\n";
+  echo "  filename: the path to the file containing certificates and optional private keys\n";
+  echo "  password: the password for the certificate store file. If test file is used, set the password to \"password\"\n\n";
+  echo "Example: php certificate_manager.php test6.pfx password\n";
+  return;
+} else {
+  try {
+    $certmgr = new MyCertMgr();
+    $certmgr->setCertStoreType(99); // auto
+    $certmgr->setCertStore($argv[1]);
+    if ($argc > 2) { $certmgr->setCertStorePassword($argv[2]);}
+    echo "Listing certificates in " . $argv[1] . "\n";
+    $certmgr->doListStoreCertificates();
+  } catch (Exception $e) {
+    echo "Cannot open certificate store!\n" . $e->getMessage();
+  }
+}
 ?>
-
-</dl>
-
-</ul>
-

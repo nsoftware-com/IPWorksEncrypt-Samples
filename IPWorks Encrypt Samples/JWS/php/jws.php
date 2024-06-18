@@ -52,12 +52,12 @@ function GenerateBase64Key($algorithm) {
 
 if ($argc < 9) {
   echo "usage: php jws.php -a action -alg algorithm -k key -i input [-p keypassword]\n\n";
-  echo "  action       chosen from {sign, verify}\n";
-  echo "  algorithm    the HMAC or RSA algorithm to use, chosen from {HS256, HS384, HS512, RS256, RS384, RS512, PS256, PS384, PS512}\n";
-  echo "  key          for HMAC, the base64 key or '0' to generate a key\n";
-  echo "               for RSA, the path to the key certificate (private for signing, public for verifying)\n";
-  echo "  input        the payload string to sign or JWS string to verify\n";
-  echo "  keypassword  the key certificate password (required only for private certificates with passwords)\n\n";
+  echo "  -a    action       chosen from {sign, verify}\n";
+  echo "  -alg  algorithm    the HMAC or RSA algorithm to use, chosen from {HS256, HS384, HS512, RS256, RS384, RS512, PS256, PS384, PS512}\n";
+  echo "  -k    key          for HMAC, the base64 key or '0' to generate a key\n";
+  echo "                     for RSA, the path to the key certificate (private for signing, public for verifying)\n";
+  echo "  -i    input        the payload string to sign or JWS string to verify\n";
+  echo "  -p    keypassword  the key certificate password (required only for private certificates with passwords)\n\n";
   echo "Examples: php jws.php -a sign -alg HS256 -k txAVam2uGT20a+ZJC1VWVGCM8tFYSKyJlw+2fgS/BdA= -i \"Test message\"\n";
   echo "          php jws.php -a sign -alg HS512 -k 0 -i \"Test message\"\n";
   echo "          php jws.php -a sign -alg RS384 -k .\\testrsapriv.pfx -i \"Test message\" -p test\n";
