@@ -7,7 +7,5 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="certmgr.cs" />
-    <Reference Include="nsoftware.IPWorksEncrypt">
-      <HintPath>..\..\lib\net6.0\nsoftware.IPWorksEncrypt.dll</HintPath>
-    </Reference>
+    <PackageReference Include="nsoftware.IPWorksEncrypt" Version="24.*" />
   </ItemGroup></Project>
